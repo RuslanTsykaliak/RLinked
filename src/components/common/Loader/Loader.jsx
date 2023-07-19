@@ -1,7 +1,8 @@
 import React from "react";
 import { Space, Spin } from "antd";
-// import "./index.scss";
+import "./Loader.scss";
 
+// Component function to desplay a loader with a spinning animation
 export default function Loader() {
   return (
     <div className="loader">

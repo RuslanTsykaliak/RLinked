@@ -1,3 +1,5 @@
 import moment from "moment/moment"
 
-export const getCurrentTimeStamp = () =>
+export const getCurrentTimeStamp = (timeFormat) => {
+    return moment().format(timeFormat);
+};

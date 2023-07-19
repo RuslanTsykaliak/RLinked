@@ -1,20 +1,22 @@
 import React, { useState, useMemo } from "react";
 import { postStatus, getStatus, updatePost } from "../../../api/FirestoreAPI";
 import { getCurrentTimeStamp } from "../../../helpers/useMoment";
-import ModalComponent from "../Modal/modal";
+import ModalComponent from "../Modal/Modal";
 import { uploadPostImage } from "../../../api/ImageUpload";
 import { getUniqueID } from "../../../helpers/getUniqueId";
-import PostsCard from "../PostsCard";
-import "./index.scss";
+import PostsCard from "../PostsCard/PostCard";
+import "./PostUpdate.scss";
 
 export default function PostStatus({ currentUser }) {
+  // State variables to manage the post status and modal
   const [modalOpen, setModalOpen] = useState(false);
   const [status, setStatus] = useState("");
-  const [allStatuses, setAllStatuses] = useState([]);
+  const [allStatuses, setAllStatus] = useState([]);
   const [currentPost, setCurrentPost] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [postImage, setPostImage] = useState("");
 
+  // Function to send a new status
   const sendStatus = async () => {
     let object = {
       status: status,
@@ -31,6 +33,7 @@ export default function PostStatus({ currentUser }) {
     await setStatus("");
   };
 
+  // Function to edit an existing status
   const getEditData = (posts) => {
     setModalOpen(true);
     setStatus(posts?.status);
@@ -38,22 +41,26 @@ export default function PostStatus({ currentUser }) {
     setIsEdit(true);
   };
 
+  // Function to update an edited status
   const updateStatus = () => {
     updatePost(currentPost.id, status, postImage);
     setModalOpen(false);
   };
 
+  // Fetch all the statuses using useMemo to prevent unnecessary re-renders
   useMemo(() => {
     getStatus(setAllStatus);
   }, []);
 
   return (
     <div className="post-status-main">
+      {/* Display user details */}
       <div className="user-details">
         <img src={currentUser?.imageLink} alt="imageLink" />
         <p className="name">{currentUser?.name}</p>
         <p className="headline">{currentUser?.headline}</p>
       </div>
+      {/* Form to create a new post status */}
       <div className="post-status">
         <img
           className="post-image"
@@ -71,6 +78,7 @@ export default function PostStatus({ currentUser }) {
         </button>
       </div>
 
+      {/* Modal to handle post creation/edit */}
       <ModalComponent
         setStatus={setStatus}
         modalOpen={modalOpen}
@@ -86,6 +94,7 @@ export default function PostStatus({ currentUser }) {
         currentPost={currentPost}
       />
 
+      {/* Display all the existing posts */}
       <div>
         {allStatuses.map((posts) => {
           return (

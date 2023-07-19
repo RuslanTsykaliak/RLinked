@@ -1,6 +1,6 @@
 import React from "react";
 import "../Sass/HomeComponent.scss";
-import PostStatus from "./common/PostUpdate";
+import PostStatus from "./common/PostUpdate/PostUpdate";
 
 export default function HomeComponent({ currentUser }) {
   return (

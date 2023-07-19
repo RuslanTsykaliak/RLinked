@@ -2,21 +2,24 @@ import React, { useState } from 'react'
 import { LoginAPI, GoogleSignInAPI } from '../api/AuthAPI';
 import RLinkedLogo from '../assets/RLinkedLogo.jpg';
 import GoogleButton from 'react-google-button';
-import { navigate } from '../helpers/useNavigate';
+import { useNavigate } from "react-router-dom";
 import '../Sass/LoginComponent.scss';
 import { toast } from 'react-toastify';
 
 export default function LoginComponent() {
+    let navigate = useNavigate();
     const [credentails, setCredentials] = useState({});
     const login = async () => {
         try {
         let res = await LoginAPI(credentails.email, credentails.password);
         // console.log(res?.user);
         toast.success('Signed In to RLinked!');
-    } catch(err) {
+        localStorage.setItem("userEmail", res.user.email);
+        navigate("/home");
+      } catch(err) {
         console.log(err);
         toast.error('Please Check your Credetials!');
-    }
+      }
     };
 
     const GoogleSignIn = () => {
@@ -38,7 +41,7 @@ export default function LoginComponent() {
                 }
                 type='email'
                 className='common-input'
-                placeholder='Enter your Email'
+                placeholder='Email or Phone'
                 />
                 <input
                 onChange={(event) =>
@@ -46,7 +49,7 @@ export default function LoginComponent() {
                 }
                 type='password'
                 className='common-input'
-                placeholder='Enter your Password'
+                placeholder='Password'
                 />
             </div>
             <button onClick={login} className="login-btn">
@@ -55,9 +58,7 @@ export default function LoginComponent() {
         </div>
         <hr className="hr-text" data-content="or" />
       <div className="google-btn-container">
-      <GoogleButton className='google-btn' onClick={GoogleSignIn}
-    //   {() => { console.log('Google button clicked') }} 
-      />
+      <GoogleButton className='google-btn' onClick={GoogleSignIn} />
         <p className="go-to-signup">
           New to  RLinked?{" "}
           <span className="join-now" onClick={() => navigate("/register")}>
@@ -68,27 +69,3 @@ export default function LoginComponent() {
     </div>
   );
 }
-
-
-
-        // <hr className="hr-text" data-content="or" />
-        // <div className="google-btn-container">
-        //   <p className="go-to-signup">
-        //     New to LinkedIn?{" "}
-        //     <span className="join-now" onClick={() => navigate("/register")}>
-        //       Join now
-        //     </span>
-        //   </p>
-        // </div>
-
-
-//     const login = () => {
-//         let res = LoginAPI();
-//         console.log(res);
-//     };
-//   return (
-//     <div>
-//       <h1>LoginComponent</h1>
-//       <input className='common-input' placeholder='Enter your Email'/>
-//       <button onClick={login} className='login-btn'>Log in to RLinked</button>
-//     </div>

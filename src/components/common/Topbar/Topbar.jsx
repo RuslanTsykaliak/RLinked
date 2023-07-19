@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import RLinkedLogo from "../../../assets/linkedinLogo.png";
+import LinkedinLogo from "../../../assets/RLinkedLogo.png";
 import user from "../../../assets/user.png";
-import SearchUsers from "../SearchUsers";
+import SearchUsers from "../SearchUsers/SearchUsers";
 import {
   AiOutlineHome,
   AiOutlineUserSwitch,
@@ -12,24 +12,29 @@ import {
 import { useNavigate } from "react-router-dom";
 import { BsBriefcase } from "react-icons/bs";
 import { getAllUsers } from "../../../api/FirestoreAPI";
-import ProfilePopup from "../ProfilePopup";
-import "./index.scss";
+import ProfilePopup from "../ProfilePopup/ProfilePopup";
+import "./Topbar.scss";
 
 export default function Topbar({ currentUser }) {
+  // State variables for managing the topbar behavior
   const [popupVisible, setPopupVisible] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   let navigate = useNavigate();
+
+  // Function to navigate to a specific route
   const goToRoute = (route) => {
     navigate(route);
   };
 
+  // Function to display or hide the user profile popup
   const displayPopup = () => {
     setPopupVisible(!popupVisible);
   };
 
+  // Function to navigate to a user's profile when clicked
   const openUser = (user) => {
     navigate("/profile", {
       state: {
@@ -39,6 +44,7 @@ export default function Topbar({ currentUser }) {
     });
   };
 
+  // Function to filter users based on the search input
   const handleSearch = () => {
     if (searchInput !== "") {
       let searched = users.filter((user) => {
@@ -54,6 +60,7 @@ export default function Topbar({ currentUser }) {
     }
   };
 
+  // Use useEffect to debounce the search input handling for better performance
   useEffect(() => {
     let debounced = setTimeout(() => {
       handleSearch();
@@ -62,11 +69,14 @@ export default function Topbar({ currentUser }) {
     return () => clearTimeout(debounced);
   }, [searchInput]);
 
+  // Fetch all users using useEffect when the component mounts
   useEffect(() => {
     getAllUsers(setUsers);
   }, []);
+
   return (
     <div className="topbar-main">
+      {/* Conditionally render the profile popup */}
       {popupVisible ? (
         <div className="popup-position">
           <ProfilePopup />
@@ -75,7 +85,10 @@ export default function Topbar({ currentUser }) {
         <></>
       )}
 
-      <img className="rlinked-logo" src={RLinkedLogo} alt="RLinkedLogo" />
+      {/* Render the RLinked logo */}
+      <img className="rlinked-logo" src={LinkedinLogo} alt="LinkedinLogo" />
+
+      {/* Conditionally render the search input or navigation icons */}
       {isSearch ? (
         <SearchUsers
           setIsSearch={setIsSearch}
@@ -103,23 +116,31 @@ export default function Topbar({ currentUser }) {
           <AiOutlineBell size={30} className="react-icon" />
         </div>
       )}
+
+      {/* Render the user profile image */}
       <img
         className="user-logo"
-        src={currentUser?.imageLink}
+        src={currentUser?.imageLink || user}
         alt="user"
         onClick={displayPopup}
       />
 
+      {/* Conditionally render the search results if search input is not empty */}
       {searchInput.length === 0 ? (
         <></>
       ) : (
         <div className="search-results">
+          {/* Display search results if there are any */}
           {filteredUsers.length === 0 ? (
             <div className="search-inner">No Results Found..</div>
           ) : (
             filteredUsers.map((user) => (
-              <div className="search-inner" onClick={() => openUser(user)}>
-                <img src={user.imageLink} />
+              <div
+                className="search-inner"
+                onClick={() => openUser(user)}
+                key={user.id}
+              >
+                <img src={user.imageLink || user} alt="user" />
                 <p className="name">{user.name}</p>
               </div>
             ))

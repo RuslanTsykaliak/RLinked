@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { RegisterAPI } from '../api/AuthAPI';
-// import { postUserData } from "../api/FirestoreAPI";
+import { postUserData } from "../api/FirestoreAPI";
 import RLinkedLogo from '../assets/RLinkedLogo.jpg';
 import { useNavigate } from "react-router-dom";
-// import { getUniqueID } from "../helpers/getUniqueId";
-import { navigate } from '../helpers/useNavigate';
-
+import { getUniqueID } from "../helpers/getUniqueId";
 import '../Sass/LoginComponent.scss';
 import { toast } from 'react-toastify';
 
@@ -36,8 +34,8 @@ export default function RegisterComponent() {
             <img src={RLinkedLogo} className='rlinkedLogo' />
 
             <div className="login-wrapper-inner">
-            <h1 className='heading'>Sign in</h1>
-            <p className="sub-heading">Be free in professional world</p>
+            <h1 className='heading'>Be free in professional world</h1>
+            {/* <p className="sub-heading"></p> */}
             
             <div className="auth-inputs">
                 <input
@@ -81,28 +79,3 @@ export default function RegisterComponent() {
     </div>
   );
 }
-
-
-
-
-        // <hr className="hr-text" data-content="or" />
-        // <div className="google-btn-container">
-        //   <p className="go-to-signup">
-        //     New to LinkedIn?{" "}
-        //     <span className="join-now" onClick={() => navigate("/register")}>
-        //       Join now
-        //     </span>
-        //   </p>
-        // </div>
-
-
-//     const login = () => {
-//         let res = LoginAPI();
-//         console.log(res);
-//     };
-//   return (
-//     <div>
-//       <h1>LoginComponent</h1>
-//       <input className='common-input' placeholder='Enter your Email'/>
-//       <button onClick={login} className='login-btn'>Log in to RLinked</button>
-//     </div>
